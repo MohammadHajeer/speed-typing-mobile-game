@@ -21,7 +21,10 @@ class _HomeState extends State<Home> {
   List<String> _chosenList = gameDifficulties[0].map((e) => e).toList(); // easy
   bool _startGame = false;
   int _seconds = 30;
+  double milliSecond = 30;
   final TextEditingController _textController = TextEditingController();
+
+  void calculateSeconds() {}
 
   @override
   void dispose() {
@@ -30,18 +33,24 @@ class _HomeState extends State<Home> {
   }
 
   void startTimer() {
-    const duration = Duration(seconds: 1);
+    const duration = Duration(milliseconds: 100);
 
     Timer.periodic(duration, (timer) {
-      if (_seconds > 0 && _startGame) {
+      if (milliSecond > 0 && _startGame) {
         setState(() {
-          _seconds -= 1;
+          milliSecond -= 0.1;
         });
       } else {
         if (_countScore > 0) {
-          _scores.add({"words": "$_countScore", "time": "${30 - _seconds}", "mode": _difficulty});
+          showPopupMessage(context);
+          _scores.add({
+            "words": "$_countScore",
+            "time": (30 - milliSecond).toStringAsFixed(1),
+            "mode": _difficulty
+          });
+        } else {
+          resetGame();
         }
-        resetGame();
         timer.cancel();
       }
     });
@@ -49,7 +58,7 @@ class _HomeState extends State<Home> {
 
   void resetGame() {
     setState(() {
-      _seconds = 30;
+      milliSecond = 30;
       _startGame = false;
       _difficulty = "easy";
       setList(0);
@@ -90,7 +99,8 @@ class _HomeState extends State<Home> {
                 title: const MyTextWidget(
                     text: "YOUR SCORE", textSize: 20, color: Colors.black),
                 content: MyTextWidget(
-                    text: "$_countScore words in ${30 - _seconds} seconds",
+                    text:
+                        "$_countScore words in ${(30 - milliSecond).toStringAsFixed(1)} seconds",
                     textSize: 18,
                     color: Colors.black),
                 actions: [
@@ -99,6 +109,9 @@ class _HomeState extends State<Home> {
                         Navigator.of(context).pop();
                         resetGame();
                       },
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.black)),
                       child: const MyTextWidget(
                           text: "Try Again !",
                           textSize: 14,
@@ -153,7 +166,7 @@ class _HomeState extends State<Home> {
             height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage("assets/bg-2.jpg"),
+              image: AssetImage("assets/bg.jpg"),
               fit: BoxFit.cover,
             )),
             padding: const EdgeInsets.all(20),
@@ -178,44 +191,37 @@ class _HomeState extends State<Home> {
                                           padding: EdgeInsets.all(10),
                                           child: Text("""Game Modes:
 
-Easy Mode: Suitable for beginners, with simplified word requirements.
-
-Normal Mode: A balanced challenge for players seeking a moderate level of difficulty.
-
-Hard Mode: A challenging mode for advanced players, requiring longer and more complex words.
-
+Easy: Beginner-friendly.
+Normal: Balanced challenge.
+Hard: Advanced, longer words.
 
 Game Flow:
 
-Mode Selection:
+Select Mode:
 
-Use the mode switcher to select Easy, Normal, or Hard mode.
-Choose a difficulty that matches your typing speed.
-Game Start:
+Choose: Easy, Normal, Hard.
+Pick your speed.
 
-Press "Start" to begin the 30-second speed typing challenge.
+Start Game:
+
+Press "Start" for a 30-sec challenge.
+
 Typing:
 
-Type the words that appear on the screen as quickly and accurately as possible.
+Type quickly and accurately.
+Correct words boost your score.
+Cancellation:
 
-Each correct word increases your score.
-
-
-Game Cancelation:
-
-If you wish to stop the game before the timer ends, press "Cancel."
+Press "Cancel" to stop early.
 Scoring:
 
-Score points for each correctly typed word.
+Earn points for each correct word.
+Longer words give higher scores.
 
-Longer and more challenging words yield higher scores.
+End Game:
 
-
-Game End:
-
-After 30 seconds, the game concludes.
-
-View your final score and proceed to the next page for details.
+After 30 seconds, see your final score.
+Move to the next page for details.
 """),
                                         ),
                                       ),
@@ -225,10 +231,10 @@ View your final score and proceed to the next page for details.
                       },
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.black)),
+                              MaterialStateProperty.all(Colors.white)),
                       child: const MyTextWidget(
                         text: "Game Rules",
-                        color: Colors.white,
+                        color: Colors.black,
                         textSize: 16,
                       ),
                     ),
@@ -237,7 +243,7 @@ View your final score and proceed to the next page for details.
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.black,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(20)),
                           padding: const EdgeInsets.only(
                               top: 5, bottom: 5, left: 10, right: 10),
@@ -248,7 +254,7 @@ View your final score and proceed to the next page for details.
                                 fontWeight: FontWeight.bold,
                                 fontFamily: "OxygenMono-Regular",
                                 letterSpacing: 3,
-                                color: Colors.white),
+                                color: Colors.black),
                           ),
                         ),
                         PopupMenuButton(
@@ -276,7 +282,7 @@ View your final score and proceed to the next page for details.
                                   "Easy - beginner",
                                   style: TextStyle(
                                       backgroundColor: _difficulty == "easy"
-                                          ? Colors.amber
+                                          ? Colors.limeAccent
                                           : Colors.white),
                                 ),
                               ),
@@ -304,7 +310,7 @@ View your final score and proceed to the next page for details.
                           }),
                           icon: const Icon(
                             Icons.category,
-                            color: Colors.black,
+                            color: Colors.white,
                           ),
                           tooltip: "game difficulties",
                           shadowColor: Colors.black,
@@ -318,9 +324,13 @@ View your final score and proceed to the next page for details.
                     height: 200,
                     margin: const EdgeInsets.only(top: 20),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(155, 0, 0, 0),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                        color: const Color.fromARGB(155, 0, 0, 0),
+                        borderRadius: BorderRadius.circular(20),
+                        image: const DecorationImage(
+                            image: AssetImage('assets/bg-2.jpg'),
+                            fit: BoxFit.cover,
+                            opacity: 0.4,
+                            alignment: Alignment.bottomRight)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -340,7 +350,7 @@ View your final score and proceed to the next page for details.
                           padding: const EdgeInsets.only(
                               top: 3, bottom: 3, right: 10, left: 10),
                           child: Text(
-                            "$_seconds",
+                            milliSecond.toStringAsFixed(1),
                             style: const TextStyle(
                               fontSize: 20,
                               color: Colors.black,
@@ -373,13 +383,32 @@ View your final score and proceed to the next page for details.
 
   Widget _textField() {
     return TextField(
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 3,
+      ),
       autofocus: true,
       controller: _textController,
+      cursorColor: Colors.white,
       decoration: InputDecoration(
           labelText: "Start writing",
+          labelStyle: const TextStyle(
+            color: Colors.white,
+          ),
           filled: true,
-          fillColor: Colors.white,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          fillColor: const Color.fromARGB(174, 0, 0, 0),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+                color: Color.fromARGB(121, 255, 255, 255), width: 5),
+          ),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(
+                  color: Color.fromARGB(166, 255, 255, 255), width: 5)),
           floatingLabelBehavior: FloatingLabelBehavior.never),
       onChanged: (text) {
         setState(() {
@@ -387,8 +416,11 @@ View your final score and proceed to the next page for details.
             _countScore++;
             if (_chosenList.length == 1) {
               _startGame = false;
-              _scores
-                  .add({"words": "$_countScore", "time": "${30 - _seconds}", "mode": _difficulty});
+              _scores.add({
+                "words": "$_countScore",
+                "time": "${30 - _seconds}",
+                "mode": _difficulty
+              });
               showPopupMessage(context);
             } else {
               getNextWord();
@@ -411,11 +443,11 @@ View your final score and proceed to the next page for details.
             if (s == "s") startTimer();
           },
           style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.black)),
+              backgroundColor: MaterialStateProperty.all(Colors.white)),
           child: MyTextWidget(
               text: s == "s" ? "START GAME" : "CANCEL GAME",
               textSize: 20,
-              color: Colors.white)),
+              color: Colors.black)),
     );
   }
 }

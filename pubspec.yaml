@@ -55,7 +55,7 @@ flutter:
   assets:
     - assets/bg.jpg
     - assets/bg-2.jpg
-    - assets/navigation.jpg
+    - assets/score-bg.jpg
   fonts:
     - family: OxygenMono-Regular
       fonts:

@@ -18,7 +18,7 @@ class _MyScorePageState extends State<MyScorePage> {
         title: const Text("SCORES"),
         backgroundColor: Colors.black,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_circle_left_outlined,
             size: 40,
           ),
@@ -39,15 +39,15 @@ class _MyScorePageState extends State<MyScorePage> {
                   });
                 },
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.black),
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
                     iconSize: MaterialStateProperty.all(30),
                     shape: MaterialStateProperty.all(const CircleBorder())),
-                child: const Icon(Icons.delete_sweep_outlined),
+                child: const Icon(Icons.delete_sweep_outlined, color: Colors.black),
               )),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/bg-2.jpg"), fit: BoxFit.cover)),
+                image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
         child: widget.list.isEmpty
             ? Container(
                 decoration:
@@ -70,8 +70,8 @@ class _MyScorePageState extends State<MyScorePage> {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 5),
                     decoration: BoxDecoration(
-                        color: const Color.fromARGB(155, 0, 0, 0),
-                        borderRadius: BorderRadius.circular(15)),
+                        color: Color.fromARGB(26, 255, 255, 255),
+                        borderRadius: BorderRadius.circular(15),),
                     child: ListTile(
                       title: MyTextWidget(
                           text:
