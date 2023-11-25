@@ -20,8 +20,7 @@ class _HomeState extends State<Home> {
   String _difficulty = "easy";
   List<String> _chosenList = gameDifficulties[0].map((e) => e).toList(); // easy
   bool _startGame = false;
-  int _seconds = 30;
-  double milliSecond = 30;
+  double _time = 30;
   final TextEditingController _textController = TextEditingController();
 
   void calculateSeconds() {}
@@ -36,16 +35,16 @@ class _HomeState extends State<Home> {
     const duration = Duration(milliseconds: 100);
 
     Timer.periodic(duration, (timer) {
-      if (milliSecond > 0 && _startGame) {
+      if (_time > 0 && _startGame) {
         setState(() {
-          milliSecond -= 0.1;
+          _time -= 0.1;
         });
       } else {
         if (_countScore > 0) {
           showPopupMessage(context);
           _scores.add({
             "words": "$_countScore",
-            "time": (30 - milliSecond).toStringAsFixed(1),
+            "time": (30 - _time).toStringAsFixed(1),
             "mode": _difficulty
           });
         } else {
@@ -58,7 +57,7 @@ class _HomeState extends State<Home> {
 
   void resetGame() {
     setState(() {
-      milliSecond = 30;
+      _time = 30;
       _startGame = false;
       _difficulty = "easy";
       setList(0);
@@ -100,7 +99,7 @@ class _HomeState extends State<Home> {
                     text: "YOUR SCORE", textSize: 20, color: Colors.black),
                 content: MyTextWidget(
                     text:
-                        "$_countScore words in ${(30 - milliSecond).toStringAsFixed(1)} seconds",
+                        "$_countScore ${_countScore > 1 ? 'words' : 'word'} in ${(30 - _time).toStringAsFixed(1)} seconds",
                     textSize: 18,
                     color: Colors.black),
                 actions: [
@@ -127,6 +126,42 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> splitWordRow = [];
+    int countSimilar = 0;
+    int countDifferences = 0;
+
+    if (_textController.text != '') {
+      String word = "";
+      for (var i = 0; i < _textController.text.length; i++) {
+        word += _textController.text[i];
+        if (_chosenWord.startsWith(word)) {
+          countSimilar++;
+        } else {
+          countDifferences++;
+        }
+      }
+    }
+
+    for (var i = 0; i < _chosenWord.length; i++) {
+      splitWordRow.add(Container(
+        height: 30,
+        width: 30,
+        decoration: BoxDecoration(
+            color: i < countSimilar
+                ? const Color.fromARGB(146, 7, 206, 123)
+                : i < (countDifferences + countSimilar)
+                    ? const Color.fromARGB(202, 244, 67, 54)
+                    : Colors.white,
+            borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: Text(
+            _chosenWord[i],
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ));
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -323,39 +358,57 @@ Move to the next page for details.
                     width: double.infinity,
                     height: 200,
                     margin: const EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                        color: const Color.fromARGB(155, 0, 0, 0),
-                        borderRadius: BorderRadius.circular(20),
-                        image: const DecorationImage(
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                        image: DecorationImage(
                             image: AssetImage('assets/bg-2.jpg'),
                             fit: BoxFit.cover,
                             opacity: 0.4,
-                            alignment: Alignment.bottomRight)),
+                            alignment: Alignment.topCenter)),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          _chosenWord,
-                          style: const TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              fontFamily: "OxygenMono-Regular",
-                              letterSpacing: 5),
-                        ),
+                        SizedBox(
+                            height: 5,
+                            child: LinearProgressIndicator(
+                              value: _countScore / 35,
+                              backgroundColor: Colors.grey,
+                              valueColor:
+                                  const AlwaysStoppedAnimation(Colors.white),
+                            )),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                // margin: const EdgeInsets.only(top: 20),
+                                constraints:
+                                    const BoxConstraints(maxWidth: 340),
+                                child: Wrap(
+                                  runSpacing: 5,
+                                  spacing: 5,
+                                  alignment: WrapAlignment.center,
+                                  children: splitWordRow,
+                                ),
+                              )
+                            ]),
                         Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10)),
+                          width: double.infinity,
+                          height: 50,
+                          decoration: const BoxDecoration(
+                              color: Color.fromARGB(161, 0, 0, 0)),
                           padding: const EdgeInsets.only(
                               top: 3, bottom: 3, right: 10, left: 10),
-                          child: Text(
-                            milliSecond.toStringAsFixed(1),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontFamily: "OxygenMono-Regular",
-                              fontWeight: FontWeight.w900,
+                          child: Center(
+                            child: Text(
+                              _time.toStringAsFixed(1),
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontFamily: "OxygenMono-Regular",
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 2),
                             ),
                           ),
                         )
@@ -418,7 +471,7 @@ Move to the next page for details.
               _startGame = false;
               _scores.add({
                 "words": "$_countScore",
-                "time": "${30 - _seconds}",
+                "time": "${30 - _time}",
                 "mode": _difficulty
               });
               showPopupMessage(context);
