@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'words_list.dart';
 import 'dart:math';
 import 'score.dart';
@@ -436,6 +437,7 @@ Move to the next page for details.
 
   Widget _textField() {
     return TextField(
+      maxLength: _chosenWord.length,
       textAlign: TextAlign.center,
       style: const TextStyle(
         color: Colors.white,
@@ -481,6 +483,7 @@ Move to the next page for details.
           }
         });
       },
+      inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'\s'))],
     );
   }
 
