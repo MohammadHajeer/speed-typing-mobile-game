@@ -168,6 +168,7 @@ class _HomeState extends State<Home> {
           title: const Text(
             "Speed Type Game",
             style: TextStyle(
+                color: Colors.white,
                 fontSize: 20.0,
                 fontFamily: "OxygenMono-Regular",
                 fontWeight: FontWeight.w700),
@@ -512,6 +513,7 @@ class MyTextWidget extends StatelessWidget {
   final String text;
   final double textSize;
   final Color color;
+
   const MyTextWidget(
       {required this.text,
       required this.textSize,

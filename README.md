@@ -1,4 +1,4 @@
-# project_1
+# game
 
 A new Flutter project.
 

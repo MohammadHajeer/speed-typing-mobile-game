@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:project_1/home.dart';
+import 'package:game/home.dart';
 
 class MyScorePage extends StatefulWidget {
   final List list;
+
   const MyScorePage({required this.list, super.key});
 
   @override
@@ -15,11 +16,15 @@ class _MyScorePageState extends State<MyScorePage> {
     // List list = widget.list;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("SCORES"),
+        title: const Text(
+          "SCORES",
+          style: TextStyle(color: Colors.white),
+        ),
         backgroundColor: Colors.black,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_circle_left_outlined,
+            color: Colors.white,
             size: 40,
           ),
           onPressed: () {
@@ -42,7 +47,8 @@ class _MyScorePageState extends State<MyScorePage> {
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     iconSize: MaterialStateProperty.all(30),
                     shape: MaterialStateProperty.all(const CircleBorder())),
-                child: const Icon(Icons.delete_sweep_outlined, color: Colors.black),
+                child: const Icon(Icons.delete_sweep_outlined,
+                    color: Colors.black),
               )),
       body: Container(
         decoration: const BoxDecoration(
@@ -70,8 +76,9 @@ class _MyScorePageState extends State<MyScorePage> {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 5),
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(26, 255, 255, 255),
-                        borderRadius: BorderRadius.circular(15),),
+                      color: Color.fromARGB(26, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
                     child: ListTile(
                       title: MyTextWidget(
                           text:
