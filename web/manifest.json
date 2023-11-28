@@ -1,6 +1,6 @@
 {
-    "name": "game",
-    "short_name": "game",
+    "name": "speed_type_game",
+    "short_name": "speed_type_game",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

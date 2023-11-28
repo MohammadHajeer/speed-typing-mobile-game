@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'home.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,7 +18,6 @@ class MyApp extends StatelessWidget {
     return const MaterialApp(
       home: Home(),
       debugShowCheckedModeBanner: false,
-
     );
   }
 }

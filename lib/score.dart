@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:game/home.dart';
+import 'home.dart';
 
 class MyScorePage extends StatefulWidget {
   final List list;

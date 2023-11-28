@@ -24,8 +24,6 @@ class _HomeState extends State<Home> {
   double _time = 30;
   final TextEditingController _textController = TextEditingController();
 
-  void calculateSeconds() {}
-
   @override
   void dispose() {
     _textController.dispose();

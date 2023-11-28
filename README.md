@@ -1,4 +1,4 @@
-# game
+# speed_type_game
 
 A new Flutter project.
 
