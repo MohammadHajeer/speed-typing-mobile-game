@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'widgets.dart';
 
 class MyScorePage extends StatefulWidget {
   final List list;
@@ -13,18 +13,16 @@ class MyScorePage extends StatefulWidget {
 class _MyScorePageState extends State<MyScorePage> {
   @override
   Widget build(BuildContext context) {
-    // List list = widget.list;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "SCORES",
-          style: TextStyle(color: Colors.white),
+        title: const MyTextWidget(
+          text: "Scores",
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.grey.shade200,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_circle_left_outlined,
-            color: Colors.white,
+            Icons.arrow_circle_left,
+            color: Colors.black,
             size: 40,
           ),
           onPressed: () {
@@ -32,28 +30,10 @@ class _MyScorePageState extends State<MyScorePage> {
           },
         ),
       ),
-      floatingActionButton: widget.list.isEmpty
-          ? const Text("")
-          : SizedBox(
-              height: 60,
-              width: 60,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    widget.list.clear();
-                  });
-                },
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    iconSize: MaterialStateProperty.all(30),
-                    shape: MaterialStateProperty.all(const CircleBorder())),
-                child: const Icon(Icons.delete_sweep_outlined,
-                    color: Colors.black),
-              )),
       body: Container(
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/bg.jpg"), fit: BoxFit.cover)),
+                image: AssetImage("assets/game_bg.jpg"), fit: BoxFit.cover)),
         child: widget.list.isEmpty
             ? Container(
                 decoration:
@@ -76,13 +56,13 @@ class _MyScorePageState extends State<MyScorePage> {
                   return Container(
                     margin: const EdgeInsets.only(bottom: 5),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(26, 255, 255, 255),
+                      color: const Color.fromARGB(26, 255, 255, 255),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: ListTile(
                       title: MyTextWidget(
                           text:
-                              "${widget.list.elementAt(index)['words']} words",
+                              "${widget.list.elementAt(index)['wordsCount']} words",
                           textSize: 16,
                           color: Colors.white),
                       subtitle: MyTextWidget(

@@ -35,6 +35,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  http: ^1.1.2
+  encrypted_shared_preferences: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +58,10 @@ flutter:
     - assets/bg.jpg
     - assets/bg-2.jpg
     - assets/score-bg.jpg
+    - assets/keyboard_1.jpg
+    - assets/keyboard_2.jpg
+    - assets/game_bg.jpg
+    - assets/keyboard_icon.svg
   fonts:
     - family: OxygenMono-Regular
       fonts:

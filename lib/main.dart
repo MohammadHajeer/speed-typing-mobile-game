@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:speed_type_game/login.dart';
 import 'home.dart';
 
 void main() {
@@ -15,9 +16,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
+    return MaterialApp(
+      home: const Login(),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: 'exo',
+      ),
     );
   }
 }
